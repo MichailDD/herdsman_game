@@ -1,0 +1,37 @@
+export const GAME_CONFIG = {
+  width: 960,
+  height: 640,
+  uiHeight: 56,
+  backgroundColor: 0x162013,
+  fieldColor: 0x2f9e44,
+  fieldBorderColor: 0x1b6f34,
+  countdownSeconds: 3,
+  hero: {
+    radius: 18,
+    color: 0xef4444,
+    speed: 220,
+    startPosition: {
+      x: 120,
+      y: 140,
+    },
+  },
+  animal: {
+    radius: 10,
+    color: 0xffffff,
+    collectDistance: 34,
+    followDistance: 34,
+    followSpeed: 235,
+    maxFollowSpeed: 360,
+    catchUpSpeedMultiplier: 2.4,
+    maxGroupSize: 5,
+    spawnCountMin: 6,
+    spawnCountMax: 12,
+  },
+  yard: {
+    x: 780,
+    y: 430,
+    width: 130,
+    height: 130,
+    color: 0xfacc15,
+  },
+} as const;
