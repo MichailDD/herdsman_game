@@ -48,6 +48,7 @@ Spawn generator and patrol behavior were skipped intentionally. I wanted to keep
 - Restart button
 - Win screen with final stats when all animals are delivered
 - Responsive scaling — works on mobile and small screens too
+- Rules overlay — click "Rules" to open a paytable-style how-to-play screen; the game pauses automatically and resumes when closed
 
 ## Project Structure
 

@@ -6,6 +6,8 @@ import { ClicksView } from '../ui/ClicksView'
 import { GameOverlay } from '../ui/GameOverlay'
 import { PauseButton } from '../ui/PauseButton'
 import { RestartButton } from '../ui/RestartButton'
+import { RulesButton } from '../ui/RulesButton'
+import { RulesOverlay } from '../ui/RulesOverlay'
 import { ScoreView } from '../ui/ScoreView'
 import { TimerView } from '../ui/TimerView'
 import { distanceBetween, randomInt, randomRange } from '../utils/math'
@@ -27,6 +29,8 @@ export class GameScene {
 	private readonly timerView: TimerView
 	private readonly restartButton: RestartButton
 	private readonly pauseButton: PauseButton
+	private readonly rulesButton: RulesButton
+	private readonly rulesOverlay: RulesOverlay
 	private readonly overlay: GameOverlay
 	private readonly targetMarker: Graphics
 	private score: number
@@ -51,6 +55,12 @@ export class GameScene {
 		this.pauseButton = new PauseButton(() => {
 			this.togglePause()
 		})
+		this.rulesButton = new RulesButton(() => {
+			this.openRules()
+		})
+		this.rulesOverlay = new RulesOverlay(() => {
+			this.closeRules()
+		})
 		this.overlay = new GameOverlay(() => {
 			this.startNewGame()
 		})
@@ -68,6 +78,7 @@ export class GameScene {
 		this.createUi()
 		this.container.addChild(this.targetMarker)
 		this.container.addChild(this.overlay.view)
+		this.container.addChild(this.rulesOverlay.view)
 		this.startNewGame()
 	}
 
@@ -158,6 +169,7 @@ export class GameScene {
 			this.scoreView.view,
 			this.restartButton.view,
 			this.pauseButton.view,
+			this.rulesButton.view,
 			this.clicksView.view,
 			this.timerView.view
 		)
@@ -292,6 +304,36 @@ export class GameScene {
 			this.restartButton.setEnabled(true)
 			this.pauseButton.setPaused(false)
 		}
+	}
+
+	private stateBeforeRules: GameState | null = null
+
+	private openRules(): void {
+		this.rulesOverlay.show()
+
+		if (this.gameState === 'playing' || this.gameState === 'countdown') {
+			this.stateBeforeRules = this.gameState
+			this.gameState = 'paused'
+			this.pauseButton.setPaused(true)
+			this.restartButton.setEnabled(false)
+		} else {
+			this.stateBeforeRules = this.gameState
+		}
+	}
+
+	private closeRules(): void {
+		this.rulesOverlay.hide()
+		
+		if (this.stateBeforeRules !== null) {
+			this.gameState = this.stateBeforeRules
+			if (this.stateBeforeRules === 'playing') {
+				this.pauseButton.setPaused(false)
+				this.restartButton.setEnabled(true)
+			} else if (this.stateBeforeRules === 'countdown') {
+				this.pauseButton.setPaused(false)
+			}
+		}
+		this.stateBeforeRules = null
 	}
 
 	private createTargetMarker(): Graphics {
